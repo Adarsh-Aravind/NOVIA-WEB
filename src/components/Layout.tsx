@@ -30,7 +30,7 @@ const NAV_GROUPS: { heading: string; items: NavEntry[] }[] = [
       { to: '/notes', label: 'Notes', icon: StickyNote },
       { to: '/complaints', label: 'Complaints', icon: MessageSquareWarning },
       { to: '/todos', label: 'To-dos', icon: ListTodo },
-      { to: '/brainstorms', label: 'Ideas', icon: Lightbulb },
+      { to: '/bucket-list', label: 'Bucket List', icon: Target },
       { to: '/milestones', label: 'Milestones', icon: CalendarHeart },
     ],
   },
@@ -38,7 +38,7 @@ const NAV_GROUPS: { heading: string; items: NavEntry[] }[] = [
     heading: 'Plans',
     items: [
       { to: '/finances', label: 'Finances', icon: Wallet },
-      { to: '/bucket-list', label: 'Bucket List', icon: Target },
+      { to: '/brainstorms', label: 'Ideas', icon: Lightbulb },
     ],
   },
   {
