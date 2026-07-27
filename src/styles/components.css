@@ -197,19 +197,23 @@
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   display: flex;
-  align-items: center;
   justify-content: center;
-  padding: 20px;
+  /* Overlay scrolls so a tall modal's top (its header) always stays reachable
+     instead of being pushed above the viewport. margin:auto on the card keeps
+     it centred when it's shorter than the screen. */
+  overflow-y: auto;
+  padding: 24px;
   z-index: 100;
 }
 .modal-card {
   width: 100%;
+  margin: auto;
   background: linear-gradient(180deg, rgba(45, 48, 71, 0.97), rgba(30, 32, 48, 0.97));
   border: 1px solid var(--border-strong);
   border-radius: var(--r-xl);
   box-shadow: var(--shadow-lifted);
   padding: 26px;
-  max-height: 90vh;
+  max-height: calc(100vh - 48px);
   overflow-y: auto;
 }
 .form-grid {
