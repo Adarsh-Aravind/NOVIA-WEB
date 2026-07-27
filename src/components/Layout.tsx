@@ -10,6 +10,7 @@ import {
   Target,
   HeartPulse,
   Droplets,
+  CalendarHeart,
   Sparkles,
   Settings,
   LogOut,
@@ -28,6 +29,7 @@ const NAV = [
   { to: '/finances', label: 'Finances', icon: Wallet },
   { to: '/bucket-list', label: 'Bucket List', icon: Target },
   { to: '/periods', label: 'Cycle', icon: Droplets },
+  { to: '/milestones', label: 'Milestones', icon: CalendarHeart },
   { to: '/health', label: 'Health', icon: HeartPulse },
   { to: '/updates', label: 'Updates', icon: Sparkles },
 ];

@@ -12,6 +12,7 @@ import { Brainstorms } from './pages/Brainstorms';
 import { Finances } from './pages/Finances';
 import { BucketList } from './pages/BucketList';
 import { Periods } from './pages/Periods';
+import { Milestones } from './pages/Milestones';
 import { Health } from './pages/Health';
 import { Updates } from './pages/Updates';
 import { SettingsPage } from './pages/Settings';
@@ -55,6 +56,7 @@ function Gate() {
         <Route path="finances" element={<Finances />} />
         <Route path="bucket-list" element={<BucketList />} />
         <Route path="periods" element={<Periods />} />
+        <Route path="milestones" element={<Milestones />} />
         <Route path="health" element={<Health />} />
         <Route path="updates" element={<Updates />} />
         <Route path="settings" element={<SettingsPage />} />

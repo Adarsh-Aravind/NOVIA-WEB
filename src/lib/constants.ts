@@ -33,6 +33,18 @@ export function partnerMoodAdvice(mood: string, name: string): string {
 
 export const NOTE_REACTIONS = ['❤️', '😂', '👍', '🥺', '🔥'] as const;
 
+// Daily check-in feelings, ordered brightest → lowest. Mirrors the app.
+export const CHECK_IN_FEELINGS: { emoji: string; label: string }[] = [
+  { emoji: '😄', label: 'Great' },
+  { emoji: '🙂', label: 'Good' },
+  { emoji: '😐', label: 'Okay' },
+  { emoji: '😔', label: 'Low' },
+  { emoji: '😢', label: 'Rough' },
+];
+
+// Emoji palette offered when creating a milestone. Mirrors the app.
+export const MILESTONE_EMOJIS = ['💛', '💍', '🌹', '🎉', '✈️', '🏡', '🎂', '⭐'] as const;
+
 export const BRAINSTORM_CATEGORIES = [
   { key: 'todo', label: 'To-do', emoji: '✅' },
   { key: 'study', label: 'Study', emoji: '📚' },

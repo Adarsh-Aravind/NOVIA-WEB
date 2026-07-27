@@ -53,6 +53,30 @@ export interface AppUpdate {
   created_at: string;
 }
 
+export type MilestoneRecurrence = 'yearly' | 'monthly' | 'once';
+
+export interface Milestone {
+  id: string;
+  couple_id: string;
+  title: string;
+  milestone_date: string; // 'YYYY-MM-DD' — the original date
+  recurrence: MilestoneRecurrence;
+  emoji: string | null;
+  created_by: string | null;
+  created_at: string;
+}
+
+export interface CheckIn {
+  id: string;
+  couple_id: string;
+  user_id: string;
+  check_in_date: string; // 'YYYY-MM-DD'
+  feeling: string;       // emoji glyph
+  gratitude: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface SharedNote {
   id: string;
   couple_id: string;
@@ -122,6 +146,27 @@ export interface SleepLog {
   duration_minutes: number;
   quality_rating: number;
   created_at: string;
+}
+
+export interface MedicalRecord {
+  id: string;
+  user_id: string;
+  metric_type: 'height' | 'weight' | 'blood_group' | 'blood_pressure' | 'blood_sugar' | 'hospital_visit';
+  value_json: any; // e.g. { reason: string, test_results: string }
+  record_date: string;
+  attachments: string[];
+  notes: string | null;
+  created_at: string;
+}
+
+export interface PartnerLocation {
+  user_id: string;
+  couple_id: string;
+  latitude: number;
+  longitude: number;
+  accuracy: number | null;
+  place_label: string | null;
+  updated_at: string;
 }
 
 export interface BucketListItem {

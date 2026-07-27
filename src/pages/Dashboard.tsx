@@ -4,17 +4,41 @@ import { MessageSquareWarning, ListTodo, Wallet, Droplets, ArrowRight } from 'lu
 import { useAuth } from '../context/AuthContext';
 import { supabase } from '../lib/supabase';
 import { useTable } from '../lib/useTable';
-import { MOODS, MOOD_EMOJI, partnerMoodAdvice, PHASE_COLOR } from '../lib/constants';
+import { MOODS, MOOD_EMOJI, partnerMoodAdvice, PHASE_COLOR, CHECK_IN_FEELINGS } from '../lib/constants';
 import { summarizeFinances } from '../lib/finance';
 import { calculateCyclePredictions } from '../lib/cycle';
 import { currency } from '../lib/format';
-import type { Complaint, Todo, FinanceItem, PeriodRecord } from '../types';
+import type { Complaint, Todo, FinanceItem, PeriodRecord, CheckIn } from '../types';
 
 function greeting() {
   const h = new Date().getHours();
   if (h < 12) return 'Good morning';
   if (h < 18) return 'Good afternoon';
   return 'Good evening';
+}
+
+/** Local 'YYYY-MM-DD' — matches the check_ins DATE column semantics. */
+function localISODate(d: Date): string {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}
+
+/** Consecutive-day streak ending today or yesterday, matching the app. */
+function computeStreak(dates: Set<string>): number {
+  const cursor = new Date();
+  cursor.setHours(0, 0, 0, 0);
+  if (!dates.has(localISODate(cursor))) {
+    cursor.setDate(cursor.getDate() - 1);
+    if (!dates.has(localISODate(cursor))) return 0;
+  }
+  let streak = 0;
+  while (dates.has(localISODate(cursor))) {
+    streak++;
+    cursor.setDate(cursor.getDate() - 1);
+  }
+  return streak;
 }
 
 export function Dashboard() {
@@ -29,6 +53,40 @@ export function Dashboard() {
   });
   const { rows: finances } = useTable<FinanceItem>('finances', 'couple_id', coupleId);
   const { rows: periods } = useTable<PeriodRecord>('periods', 'couple_id', coupleId);
+  const { rows: checkIns, refetch: refetchCheckIns } = useTable<CheckIn>(
+    'check_ins',
+    'couple_id',
+    coupleId,
+    { order: { column: 'check_in_date', ascending: false } },
+  );
+
+  const today = localISODate(new Date());
+  const myCheckIns = checkIns.filter((c) => c.user_id === userId);
+  const partnerCheckIns = checkIns.filter((c) => partnerProfile?.id && c.user_id === partnerProfile.id);
+  const myToday = myCheckIns.find((c) => c.check_in_date === today) ?? null;
+  const partnerToday = partnerCheckIns.find((c) => c.check_in_date === today) ?? null;
+  const myStreak = useMemo(
+    () => computeStreak(new Set(myCheckIns.map((c) => c.check_in_date))),
+    [myCheckIns],
+  );
+  const [checkInGratitude, setCheckInGratitude] = useState('');
+
+  const submitCheckIn = async (feeling: string) => {
+    if (!coupleId || !userId || !feeling) return;
+    await supabase.from('check_ins').upsert(
+      {
+        couple_id: coupleId,
+        user_id: userId,
+        check_in_date: today,
+        feeling,
+        gratitude: checkInGratitude.trim() || myToday?.gratitude || null,
+        updated_at: new Date().toISOString(),
+      },
+      { onConflict: 'user_id,check_in_date' },
+    );
+    setCheckInGratitude('');
+    refetchCheckIns();
+  };
 
   // Live mood sync — mirrors the app's broadcast channel `mood-sync:<coupleId>`.
   useEffect(() => {
@@ -100,6 +158,49 @@ export function Dashboard() {
             </button>
           ))}
         </div>
+      </div>
+
+      {/* Daily check-in */}
+      <div className="card pad-lg" style={{ marginBottom: 20 }}>
+        <div className="spread" style={{ marginBottom: 14 }}>
+          <div className="card-title">
+            {myToday ? "Today's check-in" : 'How are you feeling today?'}
+          </div>
+          {myStreak > 0 && <span className="pill">🔥 {myStreak}-day streak</span>}
+        </div>
+        <div className="mood-row">
+          {CHECK_IN_FEELINGS.map((f) => (
+            <button
+              key={f.label}
+              className={`mood-btn ${myToday?.feeling === f.emoji ? 'active' : ''}`}
+              onClick={() => submitCheckIn(f.emoji)}
+            >
+              <span className="mood-emoji">{f.emoji}</span>
+              <span className="mood-label">{f.label}</span>
+            </button>
+          ))}
+        </div>
+        <input
+          className="field"
+          style={{ marginTop: 14 }}
+          value={checkInGratitude}
+          onChange={(e) => setCheckInGratitude(e.target.value)}
+          onBlur={() => {
+            if (checkInGratitude.trim() && myToday) submitCheckIn(myToday.feeling);
+          }}
+          placeholder="One thing you're grateful for (optional)…"
+        />
+        {myToday?.gratitude && !checkInGratitude && (
+          <p className="muted" style={{ fontSize: 13.5, marginTop: 8, lineHeight: 1.5 }}>
+            🌿 {myToday.gratitude}
+          </p>
+        )}
+        {partnerToday && (
+          <p className="faint" style={{ fontSize: 13, marginTop: 10 }}>
+            {partnerProfile?.display_name ?? 'Your partner'} checked in {partnerToday.feeling}
+            {partnerToday.gratitude ? ` — “${partnerToday.gratitude}”` : ''}
+          </p>
+        )}
       </div>
 
       {/* Partner advice */}

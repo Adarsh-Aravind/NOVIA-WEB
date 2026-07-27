@@ -8,7 +8,7 @@ NOVIA Web acts as an extension of the primary mobile experience, granting full a
 
 ## Core Capabilities
 
-- **Dashboard**: Advanced mood analytics, partner mood insights, and aggregated daily statistics encompassing open complaints, pending tasks, financial settlements, and cycle tracking.
+- **Dashboard**: Advanced mood analytics, partner mood insights, a daily check-in with gratitude and streaks, and aggregated daily statistics encompassing open complaints, pending tasks, financial settlements, and cycle tracking.
 - **Shared Notes**: Synchronized documentation platform with real-time updates.
 - **Complaint Management**: Integrated ticketing system supporting threaded discussions and resolution workflows.
 - **Task Management**: Shared recurring and one-off task scheduling.
@@ -16,7 +16,8 @@ NOVIA Web acts as an extension of the primary mobile experience, granting full a
 - **Financial Tracking**: Comprehensive expense and borrowing ledger, featuring automated settlement calculations and monthly subscription forecasting.
 - **Bucket List**: Shared aspiration tracking structured by category.
 - **Cycle Analytics**: Advanced physiological tracking with predictive modeling for phases and fertile windows.
-- **Health Logs**: Personalized dietary and sleep pattern recording.
+- **Milestones**: Shared relationship anniversaries and one-off dates with an "on this day" countdown.
+- **Health Logs**: Personalized dietary and sleep pattern recording, plus shared hospital-visit records.
 - **System Updates**: Centralized changelog for shared environments.
 - **Profile Management**: Complete control over display settings, pairing configurations, and authentication.
 
