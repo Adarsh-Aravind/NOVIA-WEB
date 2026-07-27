@@ -1,4 +1,11 @@
-// Mirrors the mobile app's src/types/index.ts — same Supabase schema.
+// Mirrors the mobile app's src/types/index.ts — one Supabase schema, two clients.
+
+export interface Couple {
+  id: string;
+  user_1_id: string;
+  user_2_id: string;
+  created_at: string;
+}
 
 export interface Profile {
   id: string;
@@ -59,7 +66,7 @@ export interface Milestone {
   id: string;
   couple_id: string;
   title: string;
-  milestone_date: string; // 'YYYY-MM-DD' — the original date
+  milestone_date: string; // 'YYYY-MM-DD'
   recurrence: MilestoneRecurrence;
   emoji: string | null;
   created_by: string | null;
@@ -71,7 +78,7 @@ export interface CheckIn {
   couple_id: string;
   user_id: string;
   check_in_date: string; // 'YYYY-MM-DD'
-  feeling: string;       // emoji glyph
+  feeling: string; // emoji glyph
   gratitude: string | null;
   created_at: string;
   updated_at: string;
@@ -85,6 +92,7 @@ export interface SharedNote {
   updated_by: string;
   created_at: string;
   updated_at: string;
+  /** Map of userId -> emoji. Each partner has at most one reaction per note. */
   reactions?: Record<string, string>;
 }
 
@@ -109,6 +117,7 @@ export interface FinanceItem {
   due_date: string;
   renewal_cycle: 'monthly' | 'yearly' | 'none';
   status: 'pending' | 'paid' | 'overdue';
+  /** Personal debt — owned by created_by, excluded from shared/settlement math. */
   is_self_liability: boolean;
   last_paid_at: string | null;
   created_by: string | null;
@@ -119,7 +128,7 @@ export interface FinanceItem {
 export interface PeriodRecord {
   id: string;
   couple_id: string;
-  start_date: string;
+  start_date: string; // YYYY-MM-DD
   end_date: string | null;
   cycle_length_override: number | null;
   symptoms: string[];
@@ -151,7 +160,13 @@ export interface SleepLog {
 export interface MedicalRecord {
   id: string;
   user_id: string;
-  metric_type: 'height' | 'weight' | 'blood_group' | 'blood_pressure' | 'blood_sugar' | 'hospital_visit';
+  metric_type:
+    | 'height'
+    | 'weight'
+    | 'blood_group'
+    | 'blood_pressure'
+    | 'blood_sugar'
+    | 'hospital_visit';
   value_json: any; // e.g. { reason: string, test_results: string }
   record_date: string;
   attachments: string[];

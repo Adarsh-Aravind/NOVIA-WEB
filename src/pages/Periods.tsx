@@ -8,7 +8,7 @@ import { Modal } from '../components/Modal';
 import { calculateCyclePredictions } from '../lib/cycle';
 import { PHASE_COLOR, PERIOD_SYMPTOMS } from '../lib/constants';
 import { formatDate, toDateInput } from '../lib/format';
-import type { PeriodRecord } from '../types';
+import type { PeriodRecord } from '../lib/types';
 
 export function Periods() {
   const { coupleId } = useAuth();
@@ -86,7 +86,9 @@ export function Periods() {
                 <div style={{ textAlign: 'right' }}>
                   <div className="card-title">Next period</div>
                   <div className="display" style={{ fontSize: 22, marginTop: 4 }}>
-                    {cycle.daysUntilNextPeriod >= 0 ? `in ${cycle.daysUntilNextPeriod}d` : `${Math.abs(cycle.daysUntilNextPeriod)}d late`}
+                    {cycle.daysUntilNextPeriod >= 0
+                      ? `in ${cycle.daysUntilNextPeriod}d`
+                      : `${Math.abs(cycle.daysUntilNextPeriod)}d late`}
                   </div>
                   <div className="muted" style={{ fontSize: 13, marginTop: 2 }}>
                     {formatDate(cycle.nextPeriodStart.toISOString())}
@@ -104,7 +106,9 @@ export function Periods() {
                 <MiniStat label="Ovulation" value={formatDate(cycle.predictedOvulation.toISOString())} />
                 <MiniStat
                   label="Fertile window"
-                  value={`${formatDate(cycle.fertileWindowStart.toISOString())} – ${formatDate(cycle.fertileWindowEnd.toISOString())}`}
+                  value={`${formatDate(cycle.fertileWindowStart.toISOString())} – ${formatDate(
+                    cycle.fertileWindowEnd.toISOString(),
+                  )}`}
                 />
                 <MiniStat label="Avg period" value={`${cycle.avgPeriodLength} days`} />
               </div>
@@ -164,21 +168,11 @@ export function Periods() {
           <div className="grid grid-2" style={{ gap: 12 }}>
             <div>
               <label className="label">Start date</label>
-              <input
-                className="field"
-                type="date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-              />
+              <input className="field" type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
             </div>
             <div>
               <label className="label">End date (optional)</label>
-              <input
-                className="field"
-                type="date"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-              />
+              <input className="field" type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
             </div>
           </div>
           <div>

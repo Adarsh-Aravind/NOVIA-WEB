@@ -6,11 +6,11 @@ import {
   MessageSquareWarning,
   ListTodo,
   Lightbulb,
+  CalendarHeart,
   Wallet,
   Target,
-  HeartPulse,
   Droplets,
-  CalendarHeart,
+  HeartPulse,
   Sparkles,
   Settings,
   LogOut,
@@ -20,18 +20,38 @@ import {
 import { useAuth } from '../context/AuthContext';
 import { MOOD_EMOJI } from '../lib/constants';
 
-const NAV = [
-  { to: '/', label: 'Dashboard', icon: LayoutDashboard, end: true },
-  { to: '/notes', label: 'Notes', icon: StickyNote },
-  { to: '/complaints', label: 'Complaints', icon: MessageSquareWarning },
-  { to: '/todos', label: 'To-dos', icon: ListTodo },
-  { to: '/brainstorms', label: 'Ideas', icon: Lightbulb },
-  { to: '/finances', label: 'Finances', icon: Wallet },
-  { to: '/bucket-list', label: 'Bucket List', icon: Target },
-  { to: '/periods', label: 'Cycle', icon: Droplets },
-  { to: '/milestones', label: 'Milestones', icon: CalendarHeart },
-  { to: '/health', label: 'Health', icon: HeartPulse },
-  { to: '/updates', label: 'Updates', icon: Sparkles },
+type NavEntry = { to: string; label: string; icon: typeof LayoutDashboard; end?: boolean };
+
+const NAV_GROUPS: { heading: string; items: NavEntry[] }[] = [
+  {
+    heading: 'Together',
+    items: [
+      { to: '/', label: 'Dashboard', icon: LayoutDashboard, end: true },
+      { to: '/notes', label: 'Notes', icon: StickyNote },
+      { to: '/complaints', label: 'Complaints', icon: MessageSquareWarning },
+      { to: '/todos', label: 'To-dos', icon: ListTodo },
+      { to: '/brainstorms', label: 'Ideas', icon: Lightbulb },
+      { to: '/milestones', label: 'Milestones', icon: CalendarHeart },
+    ],
+  },
+  {
+    heading: 'Plans',
+    items: [
+      { to: '/finances', label: 'Finances', icon: Wallet },
+      { to: '/bucket-list', label: 'Bucket List', icon: Target },
+    ],
+  },
+  {
+    heading: 'Wellness',
+    items: [
+      { to: '/periods', label: 'Cycle', icon: Droplets },
+      { to: '/health', label: 'Health', icon: HeartPulse },
+    ],
+  },
+  {
+    heading: 'More',
+    items: [{ to: '/updates', label: 'Updates', icon: Sparkles }],
+  },
 ];
 
 export function Layout() {
@@ -63,11 +83,16 @@ export function Layout() {
         </div>
 
         <nav className="nav" onClick={() => setMobileOpen(false)}>
-          {NAV.map(({ to, label, icon: Icon, end }) => (
-            <NavLink key={to} to={to} end={end} className="nav-item">
-              <Icon size={18} />
-              <span>{label}</span>
-            </NavLink>
+          {NAV_GROUPS.map((group) => (
+            <div key={group.heading}>
+              <div className="nav-section">{group.heading}</div>
+              {group.items.map(({ to, label, icon: Icon, end }) => (
+                <NavLink key={to} to={to} end={end} className="nav-item">
+                  <Icon size={18} />
+                  <span>{label}</span>
+                </NavLink>
+              ))}
+            </div>
           ))}
         </nav>
 

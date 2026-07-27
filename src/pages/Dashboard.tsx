@@ -1,44 +1,27 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { MessageSquareWarning, ListTodo, Wallet, Droplets, ArrowRight } from 'lucide-react';
+import { MessageSquareWarning, ListTodo, Wallet, Droplets } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { supabase } from '../lib/supabase';
 import { useTable } from '../lib/useTable';
-import { MOODS, MOOD_EMOJI, partnerMoodAdvice, PHASE_COLOR, CHECK_IN_FEELINGS } from '../lib/constants';
+import { StatCard } from '../components/ui';
+import {
+  MOODS,
+  MOOD_EMOJI,
+  partnerMoodAdvice,
+  PHASE_COLOR,
+  CHECK_IN_FEELINGS,
+} from '../lib/constants';
 import { summarizeFinances } from '../lib/finance';
 import { calculateCyclePredictions } from '../lib/cycle';
 import { currency } from '../lib/format';
-import type { Complaint, Todo, FinanceItem, PeriodRecord, CheckIn } from '../types';
+import { localISODate, computeStreak } from '../lib/checkins';
+import type { Complaint, Todo, FinanceItem, PeriodRecord, CheckIn } from '../lib/types';
 
 function greeting() {
   const h = new Date().getHours();
   if (h < 12) return 'Good morning';
   if (h < 18) return 'Good afternoon';
   return 'Good evening';
-}
-
-/** Local 'YYYY-MM-DD' — matches the check_ins DATE column semantics. */
-function localISODate(d: Date): string {
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, '0');
-  const day = String(d.getDate()).padStart(2, '0');
-  return `${y}-${m}-${day}`;
-}
-
-/** Consecutive-day streak ending today or yesterday, matching the app. */
-function computeStreak(dates: Set<string>): number {
-  const cursor = new Date();
-  cursor.setHours(0, 0, 0, 0);
-  if (!dates.has(localISODate(cursor))) {
-    cursor.setDate(cursor.getDate() - 1);
-    if (!dates.has(localISODate(cursor))) return 0;
-  }
-  let streak = 0;
-  while (dates.has(localISODate(cursor))) {
-    streak++;
-    cursor.setDate(cursor.getDate() - 1);
-  }
-  return streak;
 }
 
 export function Dashboard() {
@@ -59,34 +42,6 @@ export function Dashboard() {
     coupleId,
     { order: { column: 'check_in_date', ascending: false } },
   );
-
-  const today = localISODate(new Date());
-  const myCheckIns = checkIns.filter((c) => c.user_id === userId);
-  const partnerCheckIns = checkIns.filter((c) => partnerProfile?.id && c.user_id === partnerProfile.id);
-  const myToday = myCheckIns.find((c) => c.check_in_date === today) ?? null;
-  const partnerToday = partnerCheckIns.find((c) => c.check_in_date === today) ?? null;
-  const myStreak = useMemo(
-    () => computeStreak(new Set(myCheckIns.map((c) => c.check_in_date))),
-    [myCheckIns],
-  );
-  const [checkInGratitude, setCheckInGratitude] = useState('');
-
-  const submitCheckIn = async (feeling: string) => {
-    if (!coupleId || !userId || !feeling) return;
-    await supabase.from('check_ins').upsert(
-      {
-        couple_id: coupleId,
-        user_id: userId,
-        check_in_date: today,
-        feeling,
-        gratitude: checkInGratitude.trim() || myToday?.gratitude || null,
-        updated_at: new Date().toISOString(),
-      },
-      { onConflict: 'user_id,check_in_date' },
-    );
-    setCheckInGratitude('');
-    refetchCheckIns();
-  };
 
   // Live mood sync — mirrors the app's broadcast channel `mood-sync:<coupleId>`.
   useEffect(() => {
@@ -118,6 +73,32 @@ export function Dashboard() {
     }
   };
 
+  // ---- Daily check-in (the app's Hub card) ----
+  const today = localISODate();
+  const myCheckIns = checkIns.filter((c) => c.user_id === userId);
+  const partnerCheckIns = checkIns.filter((c) => partnerProfile?.id && c.user_id === partnerProfile.id);
+  const myToday = myCheckIns.find((c) => c.check_in_date === today) ?? null;
+  const partnerToday = partnerCheckIns.find((c) => c.check_in_date === today) ?? null;
+  const myStreak = useMemo(() => computeStreak(myCheckIns), [myCheckIns]);
+  const [gratitude, setGratitude] = useState('');
+
+  const submitCheckIn = async (feeling: string) => {
+    if (!coupleId || !userId || !feeling) return;
+    await supabase.from('check_ins').upsert(
+      {
+        couple_id: coupleId,
+        user_id: userId,
+        check_in_date: today,
+        feeling,
+        gratitude: gratitude.trim() || myToday?.gratitude || null,
+        updated_at: new Date().toISOString(),
+      },
+      { onConflict: 'user_id,check_in_date' },
+    );
+    setGratitude('');
+    refetchCheckIns();
+  };
+
   const openComplaints = complaints.filter((c) => c.status === 'open').length;
   const upcomingTodos = todos.filter((t) => !t.is_completed).length;
 
@@ -125,9 +106,7 @@ export function Dashboard() {
     () => summarizeFinances(finances, userId, partnerProfile?.id, new Date()),
     [finances, userId, partnerProfile?.id],
   );
-
   const cycle = useMemo(() => calculateCyclePredictions(periods), [periods]);
-
   const partnerName = partnerProfile?.display_name ?? 'your partner';
 
   return (
@@ -183,21 +162,21 @@ export function Dashboard() {
         <input
           className="field"
           style={{ marginTop: 14 }}
-          value={checkInGratitude}
-          onChange={(e) => setCheckInGratitude(e.target.value)}
+          value={gratitude}
+          onChange={(e) => setGratitude(e.target.value)}
           onBlur={() => {
-            if (checkInGratitude.trim() && myToday) submitCheckIn(myToday.feeling);
+            if (gratitude.trim() && myToday) submitCheckIn(myToday.feeling);
           }}
           placeholder="One thing you're grateful for (optional)…"
         />
-        {myToday?.gratitude && !checkInGratitude && (
+        {myToday?.gratitude && !gratitude && (
           <p className="muted" style={{ fontSize: 13.5, marginTop: 8, lineHeight: 1.5 }}>
             🌿 {myToday.gratitude}
           </p>
         )}
         {partnerToday && (
           <p className="faint" style={{ fontSize: 13, marginTop: 10 }}>
-            {partnerProfile?.display_name ?? 'Your partner'} checked in {partnerToday.feeling}
+            {partnerName} checked in {partnerToday.feeling}
             {partnerToday.gratitude ? ` — “${partnerToday.gratitude}”` : ''}
           </p>
         )}
@@ -255,7 +234,6 @@ export function Dashboard() {
           icon={<Droplets size={20} />}
           label="Cycle"
           value={cycle ? cycle.currentPhase : '—'}
-          tone="default"
           accent={cycle ? PHASE_COLOR[cycle.currentPhase] : undefined}
           hint={
             cycle
@@ -267,46 +245,5 @@ export function Dashboard() {
         />
       </div>
     </div>
-  );
-}
-
-function StatCard({
-  to,
-  icon,
-  label,
-  value,
-  hint,
-  tone = 'default',
-  accent,
-}: {
-  to: string;
-  icon: React.ReactNode;
-  label: string;
-  value: string;
-  hint?: string;
-  tone?: 'default' | 'danger' | 'warning';
-  accent?: string;
-}) {
-  const color =
-    accent ??
-    (tone === 'danger' ? 'var(--brick)' : tone === 'warning' ? 'var(--warning)' : 'var(--lime)');
-  return (
-    <Link to={to} className="card pad" style={{ display: 'block' }}>
-      <div className="spread" style={{ marginBottom: 12 }}>
-        <span style={{ color }}>{icon}</span>
-        <ArrowRight size={16} className="faint" />
-      </div>
-      <div className="stat-number" style={{ color, fontSize: 28 }}>
-        {value}
-      </div>
-      <div className="muted" style={{ fontSize: 13, marginTop: 4, fontWeight: 600 }}>
-        {label}
-      </div>
-      {hint && (
-        <div className="faint" style={{ fontSize: 12.5, marginTop: 2 }}>
-          {hint}
-        </div>
-      )}
-    </Link>
   );
 }

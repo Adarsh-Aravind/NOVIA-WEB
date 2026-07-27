@@ -14,7 +14,7 @@ import {
   parseLocalDate,
   toLocalISODate,
 } from '../lib/finance';
-import type { FinanceItem } from '../types';
+import type { FinanceItem } from '../lib/types';
 
 export function Finances() {
   const { coupleId, userId, profile, partnerProfile } = useAuth();
@@ -26,7 +26,6 @@ export function Finances() {
   const [modalOpen, setModalOpen] = useState(false);
   const [busy, setBusy] = useState(false);
 
-  // form state
   const [itemName, setItemName] = useState('');
   const [amount, setAmount] = useState('');
   const [dueDate, setDueDate] = useState(toDateInput(new Date()));
@@ -83,7 +82,6 @@ export function Finances() {
 
   const settle = async (item: FinanceItem) => {
     if (isRecurring(item)) {
-      // Roll the due date forward one cycle; keep it pending for next period.
       const next = nextDueDate(parseLocalDate(item.due_date), item.renewal_cycle as 'monthly' | 'yearly');
       await supabase
         .from('finances')
@@ -131,7 +129,6 @@ export function Finances() {
         }
       />
 
-      {/* Summary */}
       <div className="grid grid-3" style={{ marginBottom: 22 }}>
         <div className="card pad">
           <div className="card-title">Outstanding</div>
@@ -159,7 +156,12 @@ export function Finances() {
             className="stat-number"
             style={{
               marginTop: 6,
-              color: summary.netSettlement > 0 ? 'var(--lime)' : summary.netSettlement < 0 ? 'var(--brick)' : 'var(--text)',
+              color:
+                summary.netSettlement > 0
+                  ? 'var(--success)'
+                  : summary.netSettlement < 0
+                    ? 'var(--danger)'
+                    : 'var(--text)',
             }}
           >
             {currency(Math.abs(summary.netSettlement))}
@@ -210,12 +212,12 @@ export function Finances() {
                       </span>
                     )}
                     {paid && (
-                      <span className="tag" style={{ background: 'var(--glass-moss)', color: '#cfe6b4' }}>
+                      <span className="tag" style={{ background: 'var(--glass-success)', color: 'var(--success-soft)' }}>
                         paid
                       </span>
                     )}
                     {overdue && !paid && (
-                      <span className="tag" style={{ background: 'var(--glass-danger)', color: '#ffb4b4' }}>
+                      <span className="tag" style={{ background: 'var(--glass-danger)', color: 'var(--danger-soft)' }}>
                         overdue
                       </span>
                     )}
@@ -282,12 +284,7 @@ export function Finances() {
           </div>
           <div>
             <label className="label">{tab === 'subscription' ? 'Next due date' : 'Due date'}</label>
-            <input
-              className="field"
-              type="date"
-              value={dueDate}
-              onChange={(e) => setDueDate(e.target.value)}
-            />
+            <input className="field" type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} />
           </div>
 
           {tab === 'subscription' ? (
@@ -322,7 +319,7 @@ export function Finances() {
                 value={borrower}
                 onChange={setBorrower}
                 options={[
-                  { key: 'me', label: `Me (I owe)` },
+                  { key: 'me', label: 'Me (I owe)' },
                   { key: 'partner', label: `${partnerProfile?.display_name ?? 'Partner'} owes` },
                 ]}
               />

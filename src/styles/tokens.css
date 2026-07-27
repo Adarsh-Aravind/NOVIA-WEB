@@ -1,0 +1,80 @@
+/*
+ * NOVIA Web — design tokens, re-derived 1:1 from the mobile app's
+ * src/constants/theme.ts.
+ *
+ * Source palette (five hues):
+ *   #0E9594 teal · #F24722 ember · #2D3047 slate · #E0E2DB mist · #EDEDF4 paper
+ *
+ * Neumorphic + glassmorphic language: depth comes from translucent fills and
+ * soft layered shadows, never hard outlines. Cool slate ground, near-white
+ * (paper) type, teal as the calm primary, ember reserved for destructive.
+ */
+
+:root {
+  /* ---- Raw palette (slots, mirroring the app's PALETTE keys) ---- */
+  --slate: #2d3047; /* brand base */
+  --teal: #0e9594; /* primary accent / CTAs / active */
+  --teal-bright: #3fb8b0; /* secondary accent, success */
+  --ember: #f24722; /* destructive / alert */
+  --paper: #ededf4; /* ink / light type */
+  --amber: #e0a458; /* warning / gold */
+
+  --ground: #1e2030; /* app background */
+  --panel: #262a40; /* raised panels */
+  --well: #2d3047; /* pressed / inset wells */
+
+  /* ---- Semantic ---- */
+  --bg: var(--ground);
+  --text: var(--paper);
+  --text-muted: rgba(237, 237, 244, 0.62);
+  --text-faint: rgba(237, 237, 244, 0.38);
+
+  --primary: var(--teal);
+  --primary-hover: #13aba8;
+  --on-primary: #04201f; /* dark ink on teal fills */
+  --accent: var(--teal-bright);
+  --danger: var(--ember);
+  --danger-soft: #ff9d86;
+  --warning: var(--amber);
+  --success: var(--teal-bright);
+  --success-soft: #a9e6df;
+  --info: var(--teal);
+
+  /* ---- Glass fills (from theme.glass) ---- */
+  --glass: rgba(237, 237, 244, 0.055);
+  --glass-strong: rgba(237, 237, 244, 0.095);
+  --glass-inset: rgba(0, 0, 0, 0.26);
+  --glass-accent: rgba(14, 149, 148, 0.14);
+  --glass-accent-strong: rgba(14, 149, 148, 0.22);
+  --glass-success: rgba(63, 184, 176, 0.13);
+  --glass-danger: rgba(242, 71, 34, 0.16);
+  --glass-warning: rgba(224, 164, 88, 0.15);
+  --border: rgba(237, 237, 244, 0.12);
+  --border-strong: rgba(237, 237, 244, 0.2);
+
+  /* ---- Cycle phases (theme.colors.phase) ---- */
+  --phase-menstruation: #e0576e;
+  --phase-follicular: #0e9594;
+  --phase-ovulation: #e0a458;
+  --phase-luteal: #9c6b9e;
+  --phase-unknown: #5a6178;
+
+  /* ---- Shadows (soft-UI, from theme.shadow) ---- */
+  --shadow-soft: 0 12px 30px rgba(0, 0, 0, 0.34);
+  --shadow-lifted: 0 22px 48px rgba(0, 0, 0, 0.46);
+  --glow-accent: 0 10px 26px rgba(14, 149, 148, 0.36);
+  --glow-danger: 0 10px 24px rgba(242, 71, 34, 0.34);
+
+  /* ---- Radii (theme.borderRadius) ---- */
+  --r-sm: 12px;
+  --r-md: 18px;
+  --r-lg: 24px;
+  --r-xl: 30px;
+  --r-round: 9999px;
+
+  /* ---- Type (Fraunces display + Manrope body, from theme.fonts) ---- */
+  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-body: 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  color-scheme: dark;
+}

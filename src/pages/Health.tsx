@@ -7,7 +7,7 @@ import { PageHeader, EmptyState, Loader, SegmentedControl } from '../components/
 import { Modal } from '../components/Modal';
 import { MEAL_TYPES } from '../lib/constants';
 import { formatDate, toDateInput, toDateTimeInput } from '../lib/format';
-import type { DietLog, SleepLog, MedicalRecord } from '../types';
+import type { DietLog, SleepLog, MedicalRecord } from '../lib/types';
 
 export function Health() {
   const [tab, setTab] = useState<'diet' | 'sleep' | 'medical'>('diet');
@@ -265,8 +265,18 @@ function SleepSection() {
             <label className="label">Quality</label>
             <div className="row" style={{ gap: 6 }}>
               {[1, 2, 3, 4, 5].map((n) => (
-                <button key={n} type="button" onClick={() => setQuality(n)} className="icon-btn" style={{ width: 40, height: 40 }}>
-                  <Star size={20} fill={n <= quality ? 'var(--warning)' : 'none'} color={n <= quality ? 'var(--warning)' : 'var(--text-faint)'} />
+                <button
+                  key={n}
+                  type="button"
+                  onClick={() => setQuality(n)}
+                  className="icon-btn"
+                  style={{ width: 40, height: 40 }}
+                >
+                  <Star
+                    size={20}
+                    fill={n <= quality ? 'var(--warning)' : 'none'}
+                    color={n <= quality ? 'var(--warning)' : 'var(--text-faint)'}
+                  />
                 </button>
               ))}
             </div>
@@ -302,9 +312,7 @@ function MedicalSection() {
   );
 
   const nameOf = (uid: string) =>
-    uid === userId
-      ? profile?.display_name ?? 'You'
-      : partnerProfile?.display_name ?? 'Partner';
+    uid === userId ? profile?.display_name ?? 'You' : partnerProfile?.display_name ?? 'Partner';
 
   const fetchLogs = async () => {
     if (memberIds.length === 0) return;
@@ -405,12 +413,7 @@ function MedicalSection() {
         <div className="form-grid">
           <div>
             <label className="label">Date</label>
-            <input
-              className="field"
-              type="date"
-              value={visitDate}
-              onChange={(e) => setVisitDate(e.target.value)}
-            />
+            <input className="field" type="date" value={visitDate} onChange={(e) => setVisitDate(e.target.value)} />
           </div>
           <div>
             <label className="label">Reason for visit</label>
@@ -424,11 +427,7 @@ function MedicalSection() {
           </div>
           <div>
             <label className="label">Test results / doctor notes (optional)</label>
-            <textarea
-              className="field"
-              value={results}
-              onChange={(e) => setResults(e.target.value)}
-            />
+            <textarea className="field" value={results} onChange={(e) => setResults(e.target.value)} />
           </div>
           <div className="form-actions">
             <button className="btn btn-ghost" onClick={() => setOpen(false)}>

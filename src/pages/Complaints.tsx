@@ -6,16 +6,13 @@ import { useTable } from '../lib/useTable';
 import { PageHeader, EmptyState, Loader, SegmentedControl } from '../components/ui';
 import { Modal } from '../components/Modal';
 import { timeAgo } from '../lib/format';
-import type { Complaint, ComplaintReply } from '../types';
+import type { Complaint, ComplaintReply } from '../lib/types';
 
 export function Complaints() {
   const { coupleId, userId, profile, partnerProfile } = useAuth();
-  const { rows: complaints, loading, refetch } = useTable<Complaint>(
-    'complaints',
-    'couple_id',
-    coupleId,
-    { order: { column: 'created_at', ascending: false } },
-  );
+  const { rows: complaints, loading, refetch } = useTable<Complaint>('complaints', 'couple_id', coupleId, {
+    order: { column: 'created_at', ascending: false },
+  });
 
   const [filter, setFilter] = useState<'open' | 'resolved'>('open');
   const [modalOpen, setModalOpen] = useState(false);
@@ -102,8 +99,8 @@ export function Complaints() {
                     <span
                       className="tag"
                       style={{
-                        background: c.status === 'open' ? 'var(--glass-danger)' : 'var(--glass-moss)',
-                        color: c.status === 'open' ? '#ffb4b4' : '#cfe6b4',
+                        background: c.status === 'open' ? 'var(--glass-danger)' : 'var(--glass-success)',
+                        color: c.status === 'open' ? 'var(--danger-soft)' : 'var(--success-soft)',
                       }}
                     >
                       {c.status}
@@ -127,7 +124,6 @@ export function Complaints() {
         </div>
       )}
 
-      {/* New complaint modal */}
       <Modal open={modalOpen} onClose={() => setModalOpen(false)} title="New complaint">
         <div className="form-grid">
           <div>
@@ -160,7 +156,6 @@ export function Complaints() {
         </div>
       </Modal>
 
-      {/* Thread modal */}
       {active && (
         <ComplaintThread
           complaint={active}
@@ -247,17 +242,7 @@ function ComplaintThread({
         {replies.map((r) => {
           const mine = r.author_id === userId;
           return (
-            <div
-              key={r.id}
-              style={{
-                alignSelf: mine ? 'flex-end' : 'flex-start',
-                maxWidth: '82%',
-                background: mine ? 'var(--glass-accent)' : 'var(--glass)',
-                border: '1px solid var(--border)',
-                borderRadius: 16,
-                padding: '10px 14px',
-              }}
-            >
+            <div key={r.id} className={`bubble ${mine ? 'mine' : 'theirs'}`}>
               <div className="faint" style={{ fontSize: 11, marginBottom: 3 }}>
                 {nameOf(r.author_id)} · {timeAgo(r.created_at)}
               </div>

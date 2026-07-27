@@ -1,7 +1,7 @@
+/** Relative time: "just now", "5m ago", "3d ago", then a short date. */
 export function timeAgo(iso: string): string {
   const then = new Date(iso).getTime();
-  const diff = Date.now() - then;
-  const s = Math.round(diff / 1000);
+  const s = Math.round((Date.now() - then) / 1000);
   if (s < 45) return 'just now';
   const m = Math.round(s / 60);
   if (m < 60) return `${m}m ago`;
@@ -29,12 +29,13 @@ export function formatDateTime(iso: string): string {
   });
 }
 
+/** yyyy-mm-dd in local time, for <input type="date">. */
 export function toDateInput(d: Date): string {
-  // yyyy-mm-dd in local time for <input type="date">
   const off = d.getTimezoneOffset();
   return new Date(d.getTime() - off * 60000).toISOString().slice(0, 10);
 }
 
+/** yyyy-mm-ddThh:mm in local time, for <input type="datetime-local">. */
 export function toDateTimeInput(d: Date): string {
   const off = d.getTimezoneOffset();
   return new Date(d.getTime() - off * 60000).toISOString().slice(0, 16);
@@ -46,9 +47,4 @@ export function currency(n: number): string {
     currency: 'INR',
     maximumFractionDigits: 2,
   }).format(n);
-}
-
-export function daysBetween(a: Date, b: Date): number {
-  const ms = b.setHours(0, 0, 0, 0) - a.setHours(0, 0, 0, 0);
-  return Math.round(ms / 86400000);
 }

@@ -6,9 +6,9 @@ interface Options {
 }
 
 /**
- * Fetch every row of `table` matching `filterColumn = filterValue`, then keep it
- * live via a postgres_changes subscription. Mirrors the realtime pattern used
- * across the mobile app's hooks (useTodos, useComplaints, …).
+ * Fetch every row of `table` where `filterColumn = filterValue`, then keep it
+ * live via a postgres_changes subscription. Mirrors the realtime pattern the
+ * mobile app uses across useTodos / useComplaints / useMilestones.
  */
 export function useTable<T>(
   table: string,

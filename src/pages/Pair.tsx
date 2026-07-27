@@ -38,7 +38,8 @@ export function Pair() {
           Pair with your partner
         </h1>
         <p className="muted" style={{ textAlign: 'center', marginTop: 6, marginBottom: 24, fontSize: 14 }}>
-          Hi {profile?.display_name}. Share your ID with your partner, then paste theirs to link your accounts.
+          Hi {profile?.display_name}. Share your ID with your partner, then paste theirs to link your
+          accounts.
         </p>
 
         <label className="label">Your pairing ID</label>
@@ -55,7 +56,7 @@ export function Pair() {
             {userId}
           </code>
           <button className="icon-btn" onClick={copyId} aria-label="Copy ID">
-            {copied ? <Check size={16} color="var(--lime)" /> : <Copy size={16} />}
+            {copied ? <Check size={16} color="var(--primary)" /> : <Copy size={16} />}
           </button>
         </div>
 
@@ -75,11 +76,7 @@ export function Pair() {
           </button>
         </form>
 
-        <button
-          className="btn btn-ghost"
-          onClick={signOut}
-          style={{ width: '100%', marginTop: 14 }}
-        >
+        <button className="btn btn-ghost" onClick={signOut} style={{ width: '100%', marginTop: 14 }}>
           <LogOut size={16} /> Sign out
         </button>
       </div>

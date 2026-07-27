@@ -9,10 +9,10 @@ import { Notes } from './pages/Notes';
 import { Complaints } from './pages/Complaints';
 import { Todos } from './pages/Todos';
 import { Brainstorms } from './pages/Brainstorms';
+import { Milestones } from './pages/Milestones';
 import { Finances } from './pages/Finances';
 import { BucketList } from './pages/BucketList';
 import { Periods } from './pages/Periods';
-import { Milestones } from './pages/Milestones';
 import { Health } from './pages/Health';
 import { Updates } from './pages/Updates';
 import { SettingsPage } from './pages/Settings';
@@ -21,9 +21,7 @@ function Gate() {
   const { session, loading, coupleId } = useAuth();
   const location = useLocation();
 
-  if (loading && !session) {
-    return <Splash />;
-  }
+  if (loading && !session) return <Splash />;
 
   if (!session) {
     return (
@@ -53,10 +51,10 @@ function Gate() {
         <Route path="complaints" element={<Complaints />} />
         <Route path="todos" element={<Todos />} />
         <Route path="brainstorms" element={<Brainstorms />} />
+        <Route path="milestones" element={<Milestones />} />
         <Route path="finances" element={<Finances />} />
         <Route path="bucket-list" element={<BucketList />} />
         <Route path="periods" element={<Periods />} />
-        <Route path="milestones" element={<Milestones />} />
         <Route path="health" element={<Health />} />
         <Route path="updates" element={<Updates />} />
         <Route path="settings" element={<SettingsPage />} />

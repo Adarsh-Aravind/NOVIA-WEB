@@ -1,14 +1,8 @@
 import type { ReactNode } from 'react';
+import { Link } from 'react-router-dom';
+import { ArrowRight } from 'lucide-react';
 
-export function EmptyState({
-  icon,
-  title,
-  hint,
-}: {
-  icon?: ReactNode;
-  title: string;
-  hint?: string;
-}) {
+export function EmptyState({ icon, title, hint }: { icon?: ReactNode; title: string; hint?: string }) {
   return (
     <div className="empty fade-up">
       {icon && <div style={{ opacity: 0.4, marginBottom: 12 }}>{icon}</div>}
@@ -92,5 +86,46 @@ export function SegmentedControl<T extends string>({
         </button>
       ))}
     </div>
+  );
+}
+
+export function StatCard({
+  to,
+  icon,
+  label,
+  value,
+  hint,
+  tone = 'default',
+  accent,
+}: {
+  to: string;
+  icon: ReactNode;
+  label: string;
+  value: string;
+  hint?: string;
+  tone?: 'default' | 'danger' | 'warning';
+  accent?: string;
+}) {
+  const color =
+    accent ??
+    (tone === 'danger' ? 'var(--danger)' : tone === 'warning' ? 'var(--warning)' : 'var(--accent)');
+  return (
+    <Link to={to} className="card pad">
+      <div className="spread" style={{ marginBottom: 12 }}>
+        <span style={{ color }}>{icon}</span>
+        <ArrowRight size={16} className="faint" />
+      </div>
+      <div className="stat-number" style={{ color, fontSize: 28 }}>
+        {value}
+      </div>
+      <div className="muted" style={{ fontSize: 13, marginTop: 4, fontWeight: 600 }}>
+        {label}
+      </div>
+      {hint && (
+        <div className="faint" style={{ fontSize: 12.5, marginTop: 2 }}>
+          {hint}
+        </div>
+      )}
+    </Link>
   );
 }

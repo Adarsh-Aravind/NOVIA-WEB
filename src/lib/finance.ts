@@ -1,7 +1,7 @@
-import { FinanceItem } from '../types';
+import type { FinanceItem } from './types';
 
-// Ported verbatim from the mobile app's utils/financeMath.ts so the web totals
-// match the app exactly.
+// Ported verbatim from the mobile app's utils/financeMath.ts so web totals and
+// the who-owes-whom settlement match the app exactly.
 
 export function toLocalISODate(date: Date): string {
   const y = date.getFullYear();

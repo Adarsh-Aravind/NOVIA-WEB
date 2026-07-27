@@ -8,7 +8,7 @@ import {
 } from 'react';
 import type { Session } from '@supabase/supabase-js';
 import { supabase } from '../lib/supabase';
-import type { Profile } from '../types';
+import type { Profile } from '../lib/types';
 
 interface AuthState {
   session: Session | null;
@@ -45,7 +45,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         .single();
 
       if (error || !myProfile) {
-        console.warn('Profile not found yet', error);
+        console.warn('Profile not ready yet', error);
         setLoading(false);
         return;
       }
@@ -54,13 +54,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setCoupleId(myProfile.couple_id);
 
       if (myProfile.couple_id) {
-        const { data: partnerData } = await supabase
+        const { data: partner } = await supabase
           .from('profiles')
           .select('*')
           .eq('couple_id', myProfile.couple_id)
           .neq('id', userId)
           .maybeSingle();
-        setPartnerProfile(partnerData ?? null);
+        setPartnerProfile(partner ?? null);
       } else {
         setPartnerProfile(null);
       }
@@ -94,19 +94,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => subscription.unsubscribe();
   }, [bootstrap, reset]);
 
-  // Live-update if the partner links with us.
+  // Live-update when the partner links (their write flips our couple_id).
   useEffect(() => {
     if (!session) return;
     const ch = supabase
       .channel(`profile-self:${session.user.id}`)
       .on(
         'postgres_changes',
-        {
-          event: 'UPDATE',
-          schema: 'public',
-          table: 'profiles',
-          filter: `id=eq.${session.user.id}`,
-        },
+        { event: 'UPDATE', schema: 'public', table: 'profiles', filter: `id=eq.${session.user.id}` },
         () => bootstrap(session.user.id),
       )
       .subscribe();

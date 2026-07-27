@@ -6,7 +6,7 @@ import { useTable } from '../lib/useTable';
 import { PageHeader, EmptyState, Loader, SegmentedControl } from '../components/ui';
 import { Modal } from '../components/Modal';
 import { formatDateTime, toDateTimeInput } from '../lib/format';
-import type { Todo, TodoRecurrence } from '../types';
+import type { Todo, TodoRecurrence } from '../lib/types';
 
 const RECURRENCES: { key: TodoRecurrence; label: string }[] = [
   { key: 'once', label: 'Once' },
@@ -125,7 +125,7 @@ export function Todos() {
                       style={{
                         fontSize: 12.5,
                         fontWeight: 600,
-                        color: overdue ? 'var(--brick)' : 'var(--text-muted)',
+                        color: overdue ? 'var(--danger)' : 'var(--text-muted)',
                       }}
                     >
                       {overdue ? 'Overdue · ' : ''}

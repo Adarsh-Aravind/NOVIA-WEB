@@ -1,4 +1,4 @@
-import { PeriodRecord } from '../types';
+import type { PeriodRecord } from './types';
 
 // Ported from the mobile app's utils/cycleMath.ts.
 
@@ -132,6 +132,7 @@ export function calculateCyclePredictions(
     daysUntilNextPeriod: daysBetween(today, nextPeriodStart),
     cyclesSkipped,
     isStale: cyclesSkipped >= 2,
-    confidence: recentIntervals.length >= 3 ? 'high' : recentIntervals.length >= 1 ? 'medium' : 'low',
+    confidence:
+      recentIntervals.length >= 3 ? 'high' : recentIntervals.length >= 1 ? 'medium' : 'low',
   };
 }

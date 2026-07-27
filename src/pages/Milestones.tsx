@@ -14,7 +14,7 @@ import {
   MILESTONE_RECURRENCES,
 } from '../lib/milestones';
 import { formatDate, toDateInput } from '../lib/format';
-import type { Milestone, MilestoneRecurrence } from '../types';
+import type { Milestone, MilestoneRecurrence } from '../lib/types';
 
 function countdownLabel(days: number): string {
   if (days === 0) return 'Today';
@@ -35,7 +35,7 @@ export function Milestones() {
   const [emoji, setEmoji] = useState<string>(MILESTONE_EMOJIS[0]);
   const [busy, setBusy] = useState(false);
 
-  // Upcoming first: soonest next occurrence, one-offs already passed sink to the end.
+  // Upcoming first; one-offs that have passed sink to the end.
   const sorted = useMemo(() => {
     const now = new Date();
     return [...rows]
@@ -103,7 +103,7 @@ export function Milestones() {
               <div
                 key={m.id}
                 className="card pad"
-                style={isToday ? { borderColor: 'var(--lime)' } : undefined}
+                style={isToday ? { borderColor: 'var(--primary)' } : undefined}
               >
                 <div className="spread" style={{ alignItems: 'flex-start' }}>
                   <span style={{ fontSize: 26 }}>{m.emoji ?? '💛'}</span>
@@ -123,7 +123,7 @@ export function Milestones() {
                     className="pill"
                     style={
                       isToday
-                        ? { background: 'var(--lime)', color: 'var(--forest-deep, #14261a)' }
+                        ? { background: 'var(--primary)', color: 'var(--on-primary)' }
                         : undefined
                     }
                   >
@@ -165,11 +165,7 @@ export function Milestones() {
           </div>
           <div>
             <label className="label">Repeats</label>
-            <SegmentedControl
-              value={recurrence}
-              onChange={setRecurrence}
-              options={MILESTONE_RECURRENCES}
-            />
+            <SegmentedControl value={recurrence} onChange={setRecurrence} options={MILESTONE_RECURRENCES} />
           </div>
           <div>
             <label className="label">Emoji</label>
@@ -184,7 +180,7 @@ export function Milestones() {
                     width: 42,
                     height: 42,
                     fontSize: 20,
-                    outline: emoji === e ? '2px solid var(--lime)' : 'none',
+                    outline: emoji === e ? '2px solid var(--primary)' : 'none',
                   }}
                 >
                   {e}
@@ -196,11 +192,7 @@ export function Milestones() {
             <button className="btn btn-ghost" onClick={() => setModalOpen(false)}>
               Cancel
             </button>
-            <button
-              className="btn btn-primary"
-              onClick={create}
-              disabled={busy || !title.trim() || !date}
-            >
+            <button className="btn btn-primary" onClick={create} disabled={busy || !title.trim() || !date}>
               Add
             </button>
           </div>

@@ -1,6 +1,6 @@
 # NOVIA Web
 
-A refined web companion interface for the NOVIA application ecosystem. Built to synchronize seamlessly with the primary mobile application, it leverages a unified Supabase architecture to ensure real-time data consistency across all platforms. Designed with a sophisticated forest and neumorphic-glass aesthetic.
+A refined web companion interface for the NOVIA application ecosystem. Built to synchronize seamlessly with the primary mobile application, it leverages a unified Supabase architecture to ensure real-time data consistency across all platforms. Designed with the app's teal/slate neumorphic-glass aesthetic, re-derived 1:1 from the mobile client's design tokens.
 
 ## Architecture & Integration
 

@@ -7,7 +7,7 @@ import { PageHeader, EmptyState, Loader } from '../components/ui';
 import { Modal } from '../components/Modal';
 import { NOTE_REACTIONS } from '../lib/constants';
 import { timeAgo } from '../lib/format';
-import type { SharedNote } from '../types';
+import type { SharedNote } from '../lib/types';
 
 export function Notes() {
   const { coupleId, userId, profile, partnerProfile } = useAuth();

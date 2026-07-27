@@ -1,34 +1,17 @@
-import type { Milestone, MilestoneRecurrence } from '../types';
+import type { Milestone, MilestoneRecurrence } from './types';
 import { parseLocalDate } from './finance';
 
-/** Local-midnight copy of a date, so day comparisons ignore the clock time. */
+// Ported from the mobile app's utils/milestoneMath.ts.
+
 function atMidnight(d: Date): Date {
   return new Date(d.getFullYear(), d.getMonth(), d.getDate());
 }
 
-/** Whole days between two local-midnight dates (b - a). */
 function dayDiff(a: Date, b: Date): number {
   return Math.round((atMidnight(b).getTime() - atMidnight(a).getTime()) / 86400000);
 }
 
-/** Does a milestone fall on the given calendar day, per its recurrence? */
-export function occursOn(m: Pick<Milestone, 'milestone_date' | 'recurrence'>, day: Date): boolean {
-  const base = parseLocalDate(m.milestone_date);
-  if (isNaN(base.getTime())) return false;
-  if (m.recurrence === 'once') {
-    return dayDiff(base, day) === 0;
-  }
-  if (m.recurrence === 'monthly') {
-    return base.getDate() === day.getDate();
-  }
-  // yearly
-  return base.getMonth() === day.getMonth() && base.getDate() === day.getDate();
-}
-
-/**
- * The next calendar day (>= from) this milestone occurs, or null for a one-off
- * that has already passed.
- */
+/** The next calendar day (>= from) this milestone occurs, or null for a passed one-off. */
 export function nextOccurrence(
   m: Pick<Milestone, 'milestone_date' | 'recurrence'>,
   from: Date = new Date(),
@@ -40,16 +23,13 @@ export function nextOccurrence(
   if (m.recurrence === 'once') {
     return dayDiff(start, base) >= 0 ? base : null;
   }
-
   if (m.recurrence === 'monthly') {
-    // This month's instance, rolling to next month if the day already passed.
     let candidate = new Date(start.getFullYear(), start.getMonth(), base.getDate());
     if (dayDiff(start, candidate) < 0) {
       candidate = new Date(start.getFullYear(), start.getMonth() + 1, base.getDate());
     }
     return candidate;
   }
-
   // yearly
   let candidate = new Date(start.getFullYear(), base.getMonth(), base.getDate());
   if (dayDiff(start, candidate) < 0) {
@@ -67,10 +47,7 @@ export function daysUntilNext(
   return next ? dayDiff(from, next) : null;
 }
 
-/**
- * How many years (yearly) or months (monthly) an occurrence marks since the
- * original date. `count` is 0 for the original day itself and for one-offs.
- */
+/** Years (yearly/once) or months (monthly) an occurrence marks since the original date. */
 export function elapsedAt(
   m: Pick<Milestone, 'milestone_date' | 'recurrence'>,
   occurrence: Date,
@@ -82,7 +59,6 @@ export function elapsedAt(
       (occurrence.getMonth() - base.getMonth());
     return { count: Math.max(0, months), unit: 'month' };
   }
-  // yearly + once both report years elapsed
   return { count: Math.max(0, occurrence.getFullYear() - base.getFullYear()), unit: 'year' };
 }
 

@@ -65,7 +65,7 @@ export function SettingsPage() {
                 Feeling {partnerProfile.current_mood.toLowerCase()}
               </div>
             </div>
-            <Heart size={18} color="var(--brick)" fill="var(--brick)" />
+            <Heart size={18} color="var(--danger)" fill="var(--danger)" />
           </div>
           <button className="btn btn-danger" style={{ marginTop: 16 }} onClick={unpair}>
             <Unlink size={16} /> Unpair
@@ -89,7 +89,7 @@ export function SettingsPage() {
               {userId}
             </code>
             <button className="icon-btn" onClick={copyId} aria-label="Copy">
-              {copied ? <Check size={16} color="var(--lime)" /> : <Copy size={16} />}
+              {copied ? <Check size={16} color="var(--primary)" /> : <Copy size={16} />}
             </button>
           </div>
         </div>

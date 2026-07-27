@@ -29,11 +29,7 @@ export function Modal({
 
   return (
     <div className="modal-overlay" onMouseDown={onClose}>
-      <div
-        className="modal-card fade-up"
-        style={{ maxWidth }}
-        onMouseDown={(e) => e.stopPropagation()}
-      >
+      <div className="modal-card fade-up" style={{ maxWidth }} onMouseDown={(e) => e.stopPropagation()}>
         <div className="spread" style={{ marginBottom: 18 }}>
           <h2 className="display" style={{ fontSize: 21 }}>
             {title}

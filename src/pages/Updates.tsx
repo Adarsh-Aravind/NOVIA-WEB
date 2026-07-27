@@ -3,7 +3,7 @@ import { Sparkles } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { PageHeader, EmptyState, Loader } from '../components/ui';
 import { formatDate } from '../lib/format';
-import type { AppUpdate } from '../types';
+import type { AppUpdate } from '../lib/types';
 
 export function Updates() {
   const [updates, setUpdates] = useState<AppUpdate[]>([]);
@@ -32,7 +32,7 @@ export function Updates() {
           {updates.map((u) => (
             <div key={u.id} className="card pad-lg">
               <div className="row" style={{ gap: 10, marginBottom: 8 }}>
-                <span className="pill" style={{ background: 'var(--glass-accent)', color: 'var(--cream)' }}>
+                <span className="pill" style={{ background: 'var(--glass-accent)', color: 'var(--paper)' }}>
                   v{u.version}
                 </span>
                 <span className="faint" style={{ fontSize: 12.5 }}>

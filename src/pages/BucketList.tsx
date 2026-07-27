@@ -6,7 +6,7 @@ import { useTable } from '../lib/useTable';
 import { PageHeader, EmptyState, Loader, SegmentedControl } from '../components/ui';
 import { Modal } from '../components/Modal';
 import { BUCKET_CATEGORIES } from '../lib/constants';
-import type { BucketListItem } from '../types';
+import type { BucketListItem } from '../lib/types';
 
 type Cat = BucketListItem['category'];
 
@@ -92,11 +92,7 @@ export function BucketList() {
       ) : (
         <div className="grid grid-auto">
           {items.map((item) => (
-            <div
-              key={item.id}
-              className="card pad"
-              style={{ opacity: item.is_completed ? 0.7 : 1 }}
-            >
+            <div key={item.id} className="card pad" style={{ opacity: item.is_completed ? 0.7 : 1 }}>
               <div className="spread" style={{ alignItems: 'flex-start' }}>
                 <span style={{ fontSize: 26 }}>{emojiOf(item.category)}</span>
                 <button className="icon-btn danger" onClick={() => remove(item.id)} aria-label="Delete">
@@ -152,11 +148,7 @@ export function BucketList() {
           </div>
           <div>
             <label className="label">Description (optional)</label>
-            <textarea
-              className="field"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
+            <textarea className="field" value={description} onChange={(e) => setDescription(e.target.value)} />
           </div>
           <div className="form-actions">
             <button className="btn btn-ghost" onClick={() => setModalOpen(false)}>

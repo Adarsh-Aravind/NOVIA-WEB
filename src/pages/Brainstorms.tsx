@@ -7,7 +7,7 @@ import { PageHeader, EmptyState, Loader, SegmentedControl } from '../components/
 import { Modal } from '../components/Modal';
 import { timeAgo } from '../lib/format';
 import { BRAINSTORM_CATEGORIES } from '../lib/constants';
-import type { Brainstorm } from '../types';
+import type { Brainstorm } from '../lib/types';
 
 type Cat = Brainstorm['category'];
 

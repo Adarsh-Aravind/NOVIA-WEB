@@ -1,3 +1,6 @@
+// Shared labels, emoji, and colours — kept in step with the mobile app's
+// theme.ts (teal/slate) and vocabulary.
+
 export const MOODS = ['Happy', 'Overwhelmed', 'Exhausted', 'Low Energy', 'Neutral'] as const;
 
 export const MOOD_EMOJI: Record<string, string> = {
@@ -8,12 +11,13 @@ export const MOOD_EMOJI: Record<string, string> = {
   Neutral: '🙂',
 };
 
+// theme.colors.mood
 export const MOOD_COLOR: Record<string, string> = {
-  Happy: 'var(--lime)',
-  Overwhelmed: 'var(--brick)',
-  Exhausted: '#7D8A6F',
-  'Low Energy': '#D8B863',
-  Neutral: 'var(--forest)',
+  Happy: '#0E9594',
+  Overwhelmed: '#F24722',
+  Exhausted: '#5A6178',
+  'Low Energy': '#E0A458',
+  Neutral: '#8A90A4',
 };
 
 export function partnerMoodAdvice(mood: string, name: string): string {
@@ -33,7 +37,7 @@ export function partnerMoodAdvice(mood: string, name: string): string {
 
 export const NOTE_REACTIONS = ['❤️', '😂', '👍', '🥺', '🔥'] as const;
 
-// Daily check-in feelings, ordered brightest → lowest. Mirrors the app.
+// Daily check-in feelings, ordered brightest → lowest (mirrors the app).
 export const CHECK_IN_FEELINGS: { emoji: string; label: string }[] = [
   { emoji: '😄', label: 'Great' },
   { emoji: '🙂', label: 'Good' },
@@ -42,7 +46,6 @@ export const CHECK_IN_FEELINGS: { emoji: string; label: string }[] = [
   { emoji: '😢', label: 'Rough' },
 ];
 
-// Emoji palette offered when creating a milestone. Mirrors the app.
 export const MILESTONE_EMOJIS = ['💛', '💍', '🌹', '🎉', '✈️', '🏡', '🎂', '⭐'] as const;
 
 export const BRAINSTORM_CATEGORIES = [
@@ -73,10 +76,11 @@ export const PERIOD_SYMPTOMS = [
   'Acne',
 ] as const;
 
+// theme.colors.phase
 export const PHASE_COLOR: Record<string, string> = {
-  Menstruation: 'var(--brick)',
-  Follicular: 'var(--moss)',
-  Ovulation: 'var(--lime)',
-  Luteal: '#D8B863',
-  Unknown: '#8A8B7C',
+  Menstruation: '#E0576E',
+  Follicular: '#0E9594',
+  Ovulation: '#E0A458',
+  Luteal: '#9C6B9E',
+  Unknown: '#5A6178',
 };
