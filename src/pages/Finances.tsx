@@ -224,7 +224,11 @@ export function Finances() {
                   </div>
                   <div className="muted" style={{ fontSize: 13, marginTop: 4 }}>
                     Due {formatDate(item.due_date)}
-                    {item.type === 'borrowing' && ` · ${nameOf(item.borrower_id)} owes ${nameOf(item.lender_id)}`}
+                    {item.type === 'borrowing'
+                      ? ` · ${nameOf(item.borrower_id)} owes ${nameOf(item.lender_id)}`
+                      : item.is_self_liability
+                        ? ` · ${nameOf(item.created_by)}'s`
+                        : ' · Shared 50/50'}
                   </div>
                 </div>
                 <div style={{ fontSize: 16, fontWeight: 800, marginRight: 4 }}>{currency(Number(item.amount))}</div>
