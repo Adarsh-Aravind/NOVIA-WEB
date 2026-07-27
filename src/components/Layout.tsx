@@ -5,7 +5,6 @@ import {
   StickyNote,
   MessageSquareWarning,
   ListTodo,
-  Lightbulb,
   CalendarHeart,
   Wallet,
   Target,
@@ -32,13 +31,7 @@ const NAV_GROUPS: { heading: string; items: NavEntry[] }[] = [
       { to: '/todos', label: 'To-dos', icon: ListTodo },
       { to: '/bucket-list', label: 'Bucket List', icon: Target },
       { to: '/milestones', label: 'Milestones', icon: CalendarHeart },
-    ],
-  },
-  {
-    heading: 'Plans',
-    items: [
       { to: '/finances', label: 'Finances', icon: Wallet },
-      { to: '/brainstorms', label: 'Ideas', icon: Lightbulb },
     ],
   },
   {

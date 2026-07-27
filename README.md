@@ -12,12 +12,11 @@ NOVIA Web acts as an extension of the primary mobile experience, granting full a
 - **Shared Notes**: Synchronized documentation platform with real-time updates.
 - **Complaint Management**: Integrated ticketing system supporting threaded discussions and resolution workflows.
 - **Task Management**: Shared recurring and one-off task scheduling.
-- **Brainstorming**: Categorized ideation for objectives, studies, and future planning.
 - **Financial Tracking**: Comprehensive expense and borrowing ledger, featuring automated settlement calculations and monthly subscription forecasting.
 - **Bucket List**: Shared aspiration tracking structured by category.
 - **Cycle Analytics**: Advanced physiological tracking with predictive modeling for phases and fertile windows.
 - **Milestones**: Shared relationship anniversaries and one-off dates with an "on this day" countdown.
-- **Health Logs**: Personalized dietary and sleep pattern recording, plus shared hospital-visit records.
+- **Health**: Shared medical vault — hospital visits with reason and test results, visible to both partners.
 - **System Updates**: Centralized changelog for shared environments.
 - **Profile Management**: Complete control over display settings, pairing configurations, and authentication.
 

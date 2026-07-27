@@ -39,20 +39,12 @@ export const CHECK_IN_FEELINGS: { emoji: string; label: string }[] = [
 
 export const MILESTONE_EMOJIS = ['💛', '💍', '🌹', '🎉', '✈️', '🏡', '🎂', '⭐'] as const;
 
-export const BRAINSTORM_CATEGORIES = [
-  { key: 'todo', label: 'To-do', emoji: '✅' },
-  { key: 'study', label: 'Study', emoji: '📚' },
-  { key: 'date_ideas', label: 'Date ideas', emoji: '💐' },
-] as const;
-
 export const BUCKET_CATEGORIES = [
   { key: 'traveling', label: 'Traveling', emoji: '✈️' },
   { key: 'fine_dining', label: 'Fine dining', emoji: '🍽️' },
   { key: 'adventure', label: 'Adventure', emoji: '⛰️' },
   { key: 'learning', label: 'Learning', emoji: '🎓' },
 ] as const;
-
-export const MEAL_TYPES = ['breakfast', 'lunch', 'dinner', 'snack'] as const;
 
 export const PERIOD_SYMPTOMS = [
   'Cramps',
