@@ -1,4 +1,5 @@
 import { useEffect, type ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
 
 export function Modal({
@@ -27,7 +28,10 @@ export function Modal({
 
   if (!open) return null;
 
-  return (
+  // Portal to <body> so the fixed overlay is measured against the viewport, not
+  // a transformed ancestor (the page's .fade-up wrapper), which would otherwise
+  // trap it inside the content column and break full-screen centering.
+  return createPortal(
     <div className="modal-overlay" onMouseDown={onClose}>
       <div className="modal-card fade-up" style={{ maxWidth }} onMouseDown={(e) => e.stopPropagation()}>
         <div className="spread" style={{ marginBottom: 18 }}>
@@ -40,6 +44,7 @@ export function Modal({
         </div>
         {children}
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }

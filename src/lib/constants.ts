@@ -11,15 +11,6 @@ export const MOOD_EMOJI: Record<string, string> = {
   Neutral: '🙂',
 };
 
-// theme.colors.mood
-export const MOOD_COLOR: Record<string, string> = {
-  Happy: '#0E9594',
-  Overwhelmed: '#F24722',
-  Exhausted: '#5A6178',
-  'Low Energy': '#E0A458',
-  Neutral: '#8A90A4',
-};
-
 export function partnerMoodAdvice(mood: string, name: string): string {
   switch (mood) {
     case 'Happy':

@@ -1,12 +1,5 @@
 // Mirrors the mobile app's src/types/index.ts — one Supabase schema, two clients.
 
-export interface Couple {
-  id: string;
-  user_1_id: string;
-  user_2_id: string;
-  created_at: string;
-}
-
 export interface Profile {
   id: string;
   couple_id: string | null;
@@ -172,16 +165,6 @@ export interface MedicalRecord {
   attachments: string[];
   notes: string | null;
   created_at: string;
-}
-
-export interface PartnerLocation {
-  user_id: string;
-  couple_id: string;
-  latitude: number;
-  longitude: number;
-  accuracy: number | null;
-  place_label: string | null;
-  updated_at: string;
 }
 
 export interface BucketListItem {
