@@ -348,6 +348,31 @@ input[type='checkbox'] {
   animation: fadeUp 0.36s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
+/* ---- Skeleton loading ---- */
+@keyframes skeletonPulse {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+.skeleton {
+  background: var(--glass-strong);
+  animation: skeletonPulse 1.7s ease-in-out infinite;
+}
+.skeleton-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.skeleton-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.001ms !important;

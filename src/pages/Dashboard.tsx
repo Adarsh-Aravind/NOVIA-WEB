@@ -3,7 +3,7 @@ import { MessageSquareWarning, ListTodo, Wallet, Droplets } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { supabase } from '../lib/supabase';
 import { useTable } from '../lib/useTable';
-import { StatCard } from '../components/ui';
+import { StatCard, DashboardSkeleton } from '../components/ui';
 import {
   MOODS,
   MOOD_EMOJI,
@@ -30,18 +30,23 @@ export function Dashboard() {
   const [partnerMood, setPartnerMood] = useState(partnerProfile?.current_mood ?? 'Neutral');
   const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
 
-  const { rows: complaints } = useTable<Complaint>('complaints', 'couple_id', coupleId);
-  const { rows: todos } = useTable<Todo>('todos', 'couple_id', coupleId, {
+  const { rows: complaints, loading: lComplaints } = useTable<Complaint>('complaints', 'couple_id', coupleId);
+  const { rows: todos, loading: lTodos } = useTable<Todo>('todos', 'couple_id', coupleId, {
     order: { column: 'due_at', ascending: true },
   });
-  const { rows: finances } = useTable<FinanceItem>('finances', 'couple_id', coupleId);
-  const { rows: periods } = useTable<PeriodRecord>('periods', 'couple_id', coupleId);
-  const { rows: checkIns, refetch: refetchCheckIns } = useTable<CheckIn>(
+  const { rows: finances, loading: lFinances } = useTable<FinanceItem>('finances', 'couple_id', coupleId);
+  const { rows: periods, loading: lPeriods } = useTable<PeriodRecord>('periods', 'couple_id', coupleId);
+  const { rows: checkIns, refetch: refetchCheckIns, loading: lCheckIns } = useTable<CheckIn>(
     'check_ins',
     'couple_id',
     coupleId,
     { order: { column: 'check_in_date', ascending: false } },
   );
+
+  // Launch gate — mirror the app's HubSkeleton: hold the Hub's shape until the
+  // couple's data lands, so the first paint reads as "arriving", not a flash of
+  // zeroed stat cards.
+  const initialLoading = lComplaints || lTodos || lFinances || lPeriods || lCheckIns;
 
   // Live mood sync — mirrors the app's broadcast channel `mood-sync:<coupleId>`.
   useEffect(() => {
@@ -108,6 +113,8 @@ export function Dashboard() {
   );
   const cycle = useMemo(() => calculateCyclePredictions(periods), [periods]);
   const partnerName = partnerProfile?.display_name ?? 'your partner';
+
+  if (initialLoading) return <DashboardSkeleton />;
 
   return (
     <div className="fade-up">
